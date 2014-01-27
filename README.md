@@ -1,4 +1,4 @@
 hack-assembler
 ==============
 
-An implementation of the hack assembler. The project is described in the book as described in http://www.nand2tetris.org/
+An implementation of the assembler project, as described in "The Elements of Computing Systems: Building a Modern Computer from First Principles".

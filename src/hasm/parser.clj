@@ -19,9 +19,13 @@
     (and (contains? c-instruction-dest lhs)
          (contains? c-instruction-jump rhs))))
 
- 
-(defn is-a-symbol? [s]
-  (re-matches #"@[a-zA-Z\$_\.][0-9a-zA-Z\$_\.]*" s))
+(defn is-a-const-instruction? [s]
+  "A a-instruction representing a constant has the form of @N,
+   where N is a non-negative integer"
+  (not-nil? (re-matches #"@\d+" s)))
 
-(defn is-a-constant? [s]
-  (re-matches #"@\d+" s))
+(defn is-a-symbol-instruction? [s]
+  "A a-instruction representing a symbol has the form of @S,
+   where S can be any sequence of letters, digits, underscores,
+   dot, dollar sign and colon that does not start with a digit"
+   (re-matches #"@[a-zA-Z\$_\.:][0-9a-zA-Z\$_\.:]*" s))

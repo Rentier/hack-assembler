@@ -41,3 +41,9 @@
    where S can be any sequence of letters, digits, underscores,
    dot, dollar sign and colon that does not start with a digit"
    (re-matches #"@[a-zA-Z\$_\.:][0-9a-zA-Z\$_\.:]*" s))
+
+(defn label-instruction? [s]
+  "A label-instruction representing a label has the form of (S),
+   where S is a symbol. For its definition, refer to 
+   'symbol-instruction'"
+  (not-nil? (re-matches #"\([a-zA-Z\$_\.:][0-9a-zA-Z\$_\.:]*\)" s)))

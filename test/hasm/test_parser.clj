@@ -63,4 +63,20 @@
   (is (not (symbol-instruction? "@4:_$Xy")))
   (is (not (symbol-instruction? "@2CHAINZ"))))
 
+(deftest recognize-label-instructions
+  "Checks whether the classification of label
+   instructions into valid and invalid ones is correct"
+  (is (label-instruction? "(LOOP)"))
+  (is (label-instruction? "(foo)"))
+  (is (label-instruction? "(R1)"))
+  (is (label-instruction? "(ball.setdestination$if_true)"))
+  (is (label-instruction? "(END_EQ)"))
+  (is (label-instruction? "(:_$Xy4)"))
+  (is (label-instruction? "(_$Xy4:)"))
+  (is (label-instruction? "($Xy4:_)"))
+  (is (label-instruction? "(Xy4:_$)"))
+  (is (label-instruction? "(y4:_$X)"))
+  (is (not (label-instruction? "(4:_$Xy)"))
+  (is (not (label-instruction? "(2CHAINZ)")))))
+
 (run-tests)

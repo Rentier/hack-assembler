@@ -21,6 +21,11 @@
   (is (split-a-instruction "@FOO") "FOO")
   (is (split-a-instruction "@123") "123"))  
 
+(deftest split-label-instructions
+  "Checks whether a-instructions are split the right way"
+  (is (split-label-instruction "(FOO)") "FOO")
+  (is (split-label-instruction "(123)") "123"))
+
 (deftest recognize-calc-instructions
   "Checks whether all possible c-calc-instructions are recognized."
   (doseq [lhs ["null" "M" "D" "MD" "A" "AM" "AD" "AMD"]]

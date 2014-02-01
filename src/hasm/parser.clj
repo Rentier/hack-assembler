@@ -1,11 +1,15 @@
 (ns hasm.parser)
 
 (def not-nil? (complement nil?))
+(def not-empty? (complement empty?))
 
 (def c-instruction-dest #{"null" "M" "D" "MD" "A" "AM" "AD" "AMD"})
 (def c-instruction-comp #{"0" "1" "-1" "D" "A" "!D" "!A" "-D" "-A" "D+1" 
                           "A+1" "D-1" "A-1" "D+A" "D-A" "A-D" "D&A" "D|A"})
 (def c-instruction-jump #{"null" "JGT" "JEQ" "JGE" "JLT" "JNE" "JLE" "JMP"})
+
+(defn remove-comments [s]
+  (clojure.string/replace s #"//.*" ""))
 
 (defn split-calc-instruction [s]
   "Splits a c-instruction of form dest=comp into a its atoms"
@@ -18,6 +22,10 @@
 (defn split-a-instruction [s]
   "Returns the payload S of an a-instructions in the form of @S"
   (subs s 1))
+
+(defn split-label-instruction [s]
+  "Returns the payload S of an a-instructions in the form of (S)"
+  (subs s 1 (dec (count s))))
 
 (defn calc-instruction? [s]
   "A c-instruction for calculaion has the form of dest=comp"

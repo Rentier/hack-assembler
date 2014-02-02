@@ -28,7 +28,9 @@
 (deftest generate-binary-from-source
   "Given an *.asm file, check whether the generated binary 
    code is identical to a known to be correct version"
-  (is (code-identical? "max/Max.asm" "max/Max.hack")))
+  (is (code-identical? "max/Max.asm" "max/Max.hack"))
+  (is (code-identical? "rect/Rect.asm" "rect/Rect.hack"))
+  (is (code-identical? "pong/Pong.asm" "pong/Pong.hack")))
 
 (run-tests)
 

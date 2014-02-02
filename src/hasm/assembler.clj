@@ -14,6 +14,7 @@
     (let [[token & spare-tokens] tokens]
       (cond 
        (empty? tokens) lst
+       (symbol-instruction? token) (println token)
        :else (recur spare-tokens address syms 
                     (conj lst (get-code token)))))))
        

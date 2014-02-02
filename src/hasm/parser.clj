@@ -1,25 +1,38 @@
 (ns hasm.parser)
 
+(def c-instruction-dest #{"null" "M" "D" "MD" "A" "AM" "AD" "AMD"})
+(def c-instruction-comp #{"0" "1" "-1" "D" "A" "!D" "!A" "-D" "-A" "D+1" "A+1"
+                          "D-1" "A-1" "D+A" "D-A" "A-D" "D&A" "D|A" "M" "!M" 
+                          "-M" "M+1" "M-1" "D+M" "D-M" "M-D" "D&M" "D|M"})
+
+(def c-instruction-jump #{"null" "JGT" "JEQ" "JGE" "JLT" "JNE" "JLE" "JMP"})
+
 (def not-nil? (complement nil?))
 (def not-empty? (complement empty?))
 
-(def c-instruction-dest #{"null" "M" "D" "MD" "A" "AM" "AD" "AMD"})
-(def c-instruction-comp #{"0" "1" "-1" "D" "A" "!D" "!A" "-D" "-A" "D+1" 
-                          "A+1" "D-1" "A-1" "D+A" "D-A" "A-D" "D&A" "D|A"})
-(def c-instruction-jump #{"null" "JGT" "JEQ" "JGE" "JLT" "JNE" "JLE" "JMP"})
-
 (defn remove-comments [s]
   (clojure.string/replace s #"//.*" ""))
+
+(defn map-then-filter [map-fun filter-fun x]
+  "First maps, then filteres x"
+  (->> x (map map-fun) (filter filter-fun)))
+
+(defn get-tokens [s]
+  (let [tokens (clojure.string/split-lines s)]
+    (map-then-filter 
+     #(-> % remove-comments clojure.string/trim) 
+     #(and (not-nil? %) (not-empty? %))
+     tokens)))
 
 (defn split-calc-instruction [s]
   "Splits a c-instruction of form dest=comp into a its atoms"
   (clojure.string/split s #"=" 2))
 
 (defn split-jump-instruction [s]
-  "Splits a c-instruction of form dest;jump into its atoms"
+  "Splits a c-instruction of form comp;jump into its atoms"
   (clojure.string/split s #";" 2))
 
-(defn split-a-instruction [s]
+(defn split-symbol-instruction [s]
   "Returns the payload S of an a-instructions in the form of @S"
   (subs s 1))
 
@@ -34,9 +47,9 @@
          (contains? c-instruction-comp rhs))))
 
 (defn jump-instruction? [s]
-  "A c-instruction for jumping has the form of dest;jump"
+  "A c-instruction for jumping has the form of comp;jump"
   (let [[lhs rhs] (split-jump-instruction s)]
-    (and (contains? c-instruction-dest lhs)
+    (and (contains? c-instruction-comp lhs)
          (contains? c-instruction-jump rhs))))
 
 (defn const-instruction? [s]

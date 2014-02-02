@@ -29,8 +29,6 @@
   "Given an *.asm file, check whether the generated binary 
    code is identical to a known to be correct version"
   (is (code-identical? "max/Max.asm" "max/Max.hack")))
-  
-
 
 (run-tests)
 
